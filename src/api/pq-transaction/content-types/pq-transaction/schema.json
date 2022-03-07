@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pq_transactions",
+  "info": {
+    "singularName": "pq-transaction",
+    "pluralName": "pq-transactions",
+    "displayName": "PQ transaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "material_id": {
+      "type": "string",
+      "required": true
+    },
+    "material_name": {
+      "type": "string"
+    },
+    "remark": {
+      "type": "text"
+    },
+    "processed_qty": {
+      "type": "float"
+    }
+  }
+}
