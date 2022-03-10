@@ -100,7 +100,7 @@ const PQView = () => {
       if (isDuplicateElement) {
         let updateElement = qtySummedList.get(element[uniqueParameter]);
         updateElement["quantity"] =
-          updateElement[summationParameter] + element[summationParameter]; // cummulative sum
+          updateElement["quantity"] + element[summationParameter]; // cummulative sum
       } else {
         let listElement = {
           quantity: element[summationParameter],
