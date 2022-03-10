@@ -11,8 +11,25 @@ const PQView = () => {
   useEffect(() => {
     fetchPMTxnDataFromBackend();
     fetchPQTxnDataFromBackend();
-    // preparePQViewData();
   }, []);
+
+  useEffect(() => {
+    if (pmTxnData.length && pqTxnData.length) {
+      const pmSummationListMap = getSummedUpList(
+        pmTxnData,
+        "material_id",
+        "stock_qty"
+      );
+      const pqSummationListMap = getSummedUpList(
+        pqTxnData,
+        "material_id",
+        "processed_qty"
+      );
+
+      console.log("pmSummationListMap", pmSummationListMap);
+      console.log("pqSummationListMap", pqSummationListMap);
+    }
+  }, [pmTxnData, pqTxnData]);
 
   const fetchPMTxnDataFromBackend = async () => {
     const sortByDateDescAllEntries =
@@ -72,23 +89,6 @@ const PQView = () => {
     console.log("PQ View - PQ txn data:", pqTempData);
 
     setPQTxnData(pqTempData);
-  };
-
-  const preparePQViewData = () => {
-    console.log("preparing PQ view data...");
-    const pmSummationListMap = getSummedUpList(
-      pmTxnData,
-      "material_id",
-      "stock_qty"
-    );
-    const pqSummationListMap = getSummedUpList(
-      pqTxnData,
-      "material_id",
-      "processed_qty"
-    );
-
-    console.log("pmSummationListMap", pmSummationListMap);
-    console.log("pqSummationListMap", pqSummationListMap);
   };
 
   const getSummedUpList = (listArray, uniqueParameter, summationParameter) => {
