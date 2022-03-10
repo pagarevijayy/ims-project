@@ -10,16 +10,21 @@ const ProductMaster = () => {
   }, []);
 
   const fetchPMDataFromBackend = async () => {
-    const response = await fetch(LOCAL_API_ENDPOINTS.product_master, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${AUTH_TOKEN}`,
-      },
-    });
+    const sortByDateDescAllEntries =
+      "?sort[0]=createdAt%3Adesc&pagination[limit]=-1";
+    const response = await fetch(
+      `${LOCAL_API_ENDPOINTS.product_master}${sortByDateDescAllEntries}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${AUTH_TOKEN}`,
+        },
+      }
+    );
 
     const responseBody = await response.json();
 
-    const pmTempData = responseBody?.data.map((item) => {
+    const pmTempData = responseBody?.data?.map((item) => {
       const tempItem = {
         key: item?.id,
         id: item?.id,
@@ -36,9 +41,15 @@ const ProductMaster = () => {
 
   const tableColumns = [
     {
-      title: "ID",
+      title: "Ref ID",
       dataIndex: "id",
       key: "id",
+    },
+    {
+      title: "Entry Date",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
     },
     {
       title: "Indent Number",
@@ -66,11 +77,6 @@ const ProductMaster = () => {
       key: "stock_qty",
     },
     {
-      title: "Date",
-      dataIndex: "createdAt",
-      key: "createdAt",
-    },
-    {
       title: "Remark",
       dataIndex: "remark",
       key: "remark",
@@ -80,7 +86,11 @@ const ProductMaster = () => {
   return (
     <div className="p-5">
       <h2 className="pb-5">Product Master</h2>
-      <Table dataSource={pmData} columns={tableColumns} />
+      <Table
+        dataSource={pmData}
+        columns={tableColumns}
+        pagination={{ defaultPageSize: 6 }}
+      />
     </div>
   );
 };
