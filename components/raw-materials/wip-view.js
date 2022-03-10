@@ -3,59 +3,60 @@ import { useState, useEffect } from "react";
 import { AUTH_TOKEN, LOCAL_API_ENDPOINTS } from "../../constants/api-endpoints";
 import { Table } from "antd";
 
-const PQView = () => {
-  const [pmTxnData, setPMTxnData] = useState([]);
+const WIPView = () => {
   const [pqTxnData, setPQTxnData] = useState([]);
-  const [pqData, setPQData] = useState([]);
+  const [wipTxnData, setWIPTxnData] = useState([]);
+  const [wipData, setWIPData] = useState([]);
 
   useEffect(() => {
-    fetchPMTxnDataFromBackend();
     fetchPQTxnDataFromBackend();
+    fetchWIPTxnDataFromBackend();
   }, []);
 
   useEffect(() => {
-    if (pmTxnData.length && pqTxnData.length) {
-      const pmSummationListMap = getSummedUpList(
-        pmTxnData,
-        "material_id",
-        "stock_qty"
-      );
+    if (wipTxnData.length && pqTxnData.length) {
       const pqSummationListMap = getSummedUpList(
         pqTxnData,
         "material_id",
         "processed_qty"
       );
 
-      let pqViewData = [];
+      const wipSummationListMap = getSummedUpList(
+        wipTxnData,
+        "material_id",
+        "finished_qty"
+      );
 
-      pmSummationListMap.forEach((value, key) => {
-        let pqTempObject = {
+      let wipViewData = [];
+
+      pqSummationListMap.forEach((value, key) => {
+        let wipTempObject = {
           key: value?.material_id,
           material_id: value?.material_id,
           material_name: value?.material_name,
-          material_description: value?.material_description,
           quantity: value?.quantity,
         };
 
-        if (pqSummationListMap.has(key)) {
-          pqTempObject["quantity"] =
-            pqTempObject["quantity"] - pqSummationListMap.get(key)["quantity"];
+        if (wipSummationListMap.has(key)) {
+          wipTempObject["quantity"] =
+            wipTempObject["quantity"] -
+            wipSummationListMap.get(key)["quantity"];
         }
 
-        pqViewData.push(pqTempObject);
+        wipViewData.push(wipTempObject);
       });
 
-      console.log("pqViewData", pqViewData);
+      console.log("wipViewData", wipViewData);
 
-      setPQData(pqViewData);
+      setWIPData(wipViewData);
     }
-  }, [pmTxnData, pqTxnData]);
+  }, [wipTxnData, pqTxnData]);
 
-  const fetchPMTxnDataFromBackend = async () => {
+  const fetchWIPTxnDataFromBackend = async () => {
     const sortByDateDescAllEntries =
       "?sort[0]=createdAt%3Adesc&pagination[limit]=-1";
     const response = await fetch(
-      `${LOCAL_API_ENDPOINTS.product_master_txn}${sortByDateDescAllEntries}`,
+      `${LOCAL_API_ENDPOINTS.wip_txn}${sortByDateDescAllEntries}`,
       {
         method: "GET",
         headers: {
@@ -66,7 +67,7 @@ const PQView = () => {
 
     const responseBody = await response.json();
 
-    const pmTempData = responseBody?.data?.map((item) => {
+    const wipTempData = responseBody?.data?.map((item) => {
       const tempItem = {
         key: item?.id,
         id: item?.id,
@@ -76,7 +77,7 @@ const PQView = () => {
       return tempItem;
     });
 
-    setPMTxnData(pmTempData);
+    setWIPTxnData(wipTempData);
   };
 
   const fetchPQTxnDataFromBackend = async () => {
@@ -141,11 +142,6 @@ const PQView = () => {
       key: "material_name",
     },
     {
-      title: "Material Description",
-      dataIndex: "material_description",
-      key: "material_description",
-    },
-    {
       title: "PQ Qty",
       dataIndex: "quantity",
       key: "quantity",
@@ -154,9 +150,9 @@ const PQView = () => {
 
   return (
     <div className="p-5">
-      <h2 className="pb-5">PQ View</h2>
+      <h2 className="pb-5">WIP View</h2>
       <Table
-        dataSource={pqData}
+        dataSource={wipData}
         columns={tableColumns}
         pagination={{ defaultPageSize: 6 }}
       />
@@ -164,16 +160,4 @@ const PQView = () => {
   );
 };
 
-export default PQView;
-
-/* 
-
-logic:
-quantity on hand = inventory received (txns sum) - total of wip (txns sum)
-
-steps:
-1. Hit PM txn api and Prepare a list of sum (PM txn) based on product_id
-2. Hit PQ txn api and Prepare a list of sum (PQ txn) based on product_id
-3. Prepare final view list (PM - PQ)
-
-*/
+export default WIPView;

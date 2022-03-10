@@ -6,4 +6,5 @@ export const AUTH_TOKEN =
 export const LOCAL_API_ENDPOINTS = {
   product_master_txn: `${LOCAL_BASE_URL}/api/master-transactions`,
   pq_txn: `${LOCAL_BASE_URL}/api/pq-transactions`,
+  wip_txn: `${LOCAL_BASE_URL}/api/wip-transactions`,
 };
