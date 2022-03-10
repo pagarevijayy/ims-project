@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { AUTH_TOKEN, LOCAL_API_ENDPOINTS } from "../constants/api-endpoints";
+import { AUTH_TOKEN, LOCAL_API_ENDPOINTS } from "../../constants/api-endpoints";
 import { Table } from "antd";
 
 const ProductMaster = () => {
@@ -13,7 +13,7 @@ const ProductMaster = () => {
     const sortByDateDescAllEntries =
       "?sort[0]=createdAt%3Adesc&pagination[limit]=-1";
     const response = await fetch(
-      `${LOCAL_API_ENDPOINTS.product_master}${sortByDateDescAllEntries}`,
+      `${LOCAL_API_ENDPOINTS.product_master_txn}${sortByDateDescAllEntries}`,
       {
         method: "GET",
         headers: {
@@ -34,7 +34,7 @@ const ProductMaster = () => {
       return tempItem;
     });
 
-    console.log("PM data:", pmTempData);
+    console.log("PM view - PM Txn data:", pmTempData);
 
     setPMData(pmTempData);
   };
