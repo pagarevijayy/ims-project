@@ -129,7 +129,39 @@ const PQView = () => {
     return qtySummedList;
   };
 
-  return <div>PQView</div>;
+  const tableColumns = [
+    {
+      title: "Material ID",
+      dataIndex: "material_id",
+      key: "material_id",
+    },
+    {
+      title: "Material Name",
+      dataIndex: "material_name",
+      key: "material_name",
+    },
+    {
+      title: "Material Description",
+      dataIndex: "material_description",
+      key: "material_description",
+    },
+    {
+      title: "PQ Qty",
+      dataIndex: "quantity",
+      key: "quantity",
+    },
+  ];
+
+  return (
+    <div className="p-5">
+      <h2 className="pb-5">PQ View</h2>
+      <Table
+        dataSource={pqData}
+        columns={tableColumns}
+        pagination={{ defaultPageSize: 6 }}
+      />
+    </div>
+  );
 };
 
 export default PQView;
