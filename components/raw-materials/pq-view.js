@@ -11,7 +11,7 @@ const PQView = () => {
   useEffect(() => {
     fetchPMTxnDataFromBackend();
     fetchPQTxnDataFromBackend();
-    preparePQViewData();
+    // preparePQViewData();
   }, []);
 
   const fetchPMTxnDataFromBackend = async () => {
@@ -39,7 +39,7 @@ const PQView = () => {
       return tempItem;
     });
 
-    console.log("PM data:", pmTempData);
+    console.log("PQ view - PM txn data:", pmTempData);
 
     setPMTxnData(pmTempData);
   };
@@ -76,6 +76,41 @@ const PQView = () => {
 
   const preparePQViewData = () => {
     console.log("preparing PQ view data...");
+    const pmSummationListMap = getSummedUpList(
+      pmTxnData,
+      "material_id",
+      "stock_qty"
+    );
+    const pqSummationListMap = getSummedUpList(
+      pqTxnData,
+      "material_id",
+      "processed_qty"
+    );
+
+    console.log("pmSummationListMap", pmSummationListMap);
+    console.log("pqSummationListMap", pqSummationListMap);
+  };
+
+  const getSummedUpList = (listArray, uniqueParameter, summationParameter) => {
+    let qtySummedList = new Map();
+
+    listArray.forEach((element) => {
+      const isDuplicateElement = qtySummedList.has(element[uniqueParameter]);
+
+      if (isDuplicateElement) {
+        let updateElement = qtySummedList.get(element[uniqueParameter]);
+        updateElement["quantity"] =
+          updateElement[summationParameter] + element[summationParameter]; // cummulative sum
+      } else {
+        let listElement = {
+          quantity: element[summationParameter],
+          ...element,
+        };
+        qtySummedList.set(element[uniqueParameter], listElement);
+      }
+    });
+
+    return qtySummedList;
   };
 
   return <div>PQView</div>;
