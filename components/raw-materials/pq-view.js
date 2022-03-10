@@ -26,8 +26,28 @@ const PQView = () => {
         "processed_qty"
       );
 
-      console.log("pmSummationListMap", pmSummationListMap);
-      console.log("pqSummationListMap", pqSummationListMap);
+      let pqViewData = [];
+
+      pmSummationListMap.forEach((value, key, i) => {
+        let pqTempObject = {
+          key: value?.material_id,
+          material_id: value?.material_id,
+          material_name: value?.material_name,
+          material_description: value?.material_description,
+          quantity: value?.quantity,
+        };
+
+        if (pqSummationListMap.has(key)) {
+          pqTempObject["quantity"] =
+            pqTempObject["quantity"] - pqSummationListMap.get(key)["quantity"];
+        }
+
+        pqViewData.push(pqTempObject);
+      });
+
+      console.log("pqViewData", pqViewData);
+
+      setPQData(pqViewData);
     }
   }, [pmTxnData, pqTxnData]);
 
@@ -56,8 +76,6 @@ const PQView = () => {
       return tempItem;
     });
 
-    console.log("PQ view - PM txn data:", pmTempData);
-
     setPMTxnData(pmTempData);
   };
 
@@ -85,8 +103,6 @@ const PQView = () => {
       };
       return tempItem;
     });
-
-    console.log("PQ View - PQ txn data:", pqTempData);
 
     setPQTxnData(pqTempData);
   };
