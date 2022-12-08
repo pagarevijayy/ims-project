@@ -9,3 +9,5 @@ Tech stack:
 - strapi.js
 - postgresql
 - antd component library
+
+_(repo now public and sorta archived)_
