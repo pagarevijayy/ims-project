@@ -8,3 +8,4 @@ Tech stack:
 - tailwindcss
 - strapi.js
 - postgresql
+- antd component library
