@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wip_transactions",
+  "info": {
+    "singularName": "wip-transaction",
+    "pluralName": "wip-transactions",
+    "displayName": "WIP transaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "material_name": {
+      "type": "string"
+    },
+    "material_id": {
+      "type": "string",
+      "required": true
+    },
+    "finished_qty": {
+      "type": "float",
+      "required": true
+    },
+    "remark": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "master_transactions",
+  "info": {
+    "singularName": "master-transaction",
+    "pluralName": "master-transactions",
+    "displayName": "Master Transaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "indent_number": {
+      "type": "string"
+    },
+    "material_id": {
+      "type": "string",
+      "required": true
+    },
+    "material_name": {
+      "type": "string"
+    },
+    "material_description": {
+      "type": "text"
+    },
+    "stock_qty": {
+      "type": "float",
+      "required": true,
+      "default": 0
+    },
+    "remark": {
+      "type": "text"
+    }
+  }
+}
